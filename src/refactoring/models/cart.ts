@@ -1,4 +1,4 @@
-import { CartItem, Coupon, Product } from "../../types";
+import { CartItem, Coupon } from "../../types";
 
 // 1. 최대 할인율 구하기
 export const getMaxApplicableDiscount = (item: CartItem) => {
@@ -52,26 +52,21 @@ export const calculateCartTotal = (
 
 export const updateCartItemQuantity = (
   cart: CartItem[],
-  product: Product,
+  productId: string,
   newQuantity: number
 ): CartItem[] => {
-  const existing = cart.find((item) => item.product.id === product.id);
+  const existing = cart.find((item) => item.product.id === productId);
 
-  if (!existing && newQuantity > 0) {
-    return [
-      ...cart,
-      { product, quantity: Math.min(newQuantity, product.stock) }
-    ];
-  }
+  if (!existing) return cart; // cart에 존재하지 않으면 변경 없이 반환
 
   return cart
     .map((item) =>
-      item.product.id === product.id
+      item.product.id === productId
         ? {
             ...item,
             quantity: Math.min(Math.max(newQuantity, 0), item.product.stock)
           }
         : item
     )
-    .filter((item) => item.quantity > 0);
+    .filter((item) => item.quantity > 0); // 수량 0이면 제거
 };

@@ -479,7 +479,7 @@ describe("basic > ", () => {
       expect(result.current.cart).toHaveLength(0);
     });
 
-    test.only("제품 수량을 업데이트해야 합니다", () => {
+    test("제품 수량을 업데이트해야 합니다", () => {
       const { result } = renderHook(() => useCart());
 
       act(() => {

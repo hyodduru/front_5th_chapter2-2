@@ -7,18 +7,20 @@ export const useCart = () => {
   const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
 
   const addToCart = (product: Product) => {
-    const existingItem = cart.find((item) => item.product.id === product.id);
-    const currentQuantity = existingItem?.quantity ?? 0;
+    setCart((prevCart) => {
+      const existingItem = prevCart.find(
+        (item) => item.product.id === product.id
+      );
+      const currentQty = existingItem?.quantity ?? 0;
 
-    if (currentQuantity >= product.stock) return;
+      if (!existingItem && product.stock > 0) {
+        return [...prevCart, { product, quantity: 1 }];
+      }
 
-    const updatedCart = updateCartItemQuantity(
-      cart,
-      product,
-      currentQuantity + 1
-    );
+      if (currentQty >= product.stock) return prevCart;
 
-    setCart(updatedCart);
+      return updateCartItemQuantity(prevCart, product.id, currentQty + 1);
+    });
   };
 
   const removeFromCart = (productId: string) => {
@@ -36,7 +38,7 @@ export const useCart = () => {
 
       const updatedCart = updateCartItemQuantity(
         prevCart,
-        product,
+        productId,
         newQuantity
       );
       return updatedCart;
