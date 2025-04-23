@@ -4,7 +4,7 @@ import {
   calculateCartTotal,
   getRemainingStock as _getRemainingStock,
   updateCartItemQuantity
-} from "../models/cart";
+} from "./cart";
 
 export const useCart = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
