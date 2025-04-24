@@ -132,7 +132,6 @@ export function useAdminProduct({
     handleStockUpdate,
     handleEditComplete,
     newDiscount,
-    setNewDiscount,
     handleAddDiscount,
     handleRemoveDiscount,
     showNewProductForm,
