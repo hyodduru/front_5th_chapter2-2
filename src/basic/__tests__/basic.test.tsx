@@ -8,11 +8,11 @@ import {
   screen,
   within
 } from "@testing-library/react";
-import { CartPage } from "../../refactoring/pages/CartPage";
-import { AdminPage } from "../../refactoring/pages/AdminPage";
+import { CartPage } from "../../refactoring/cart/pages/CartPage";
+import { AdminPage } from "../../refactoring/admin/pages/AdminPage";
 import { CartItem, Coupon, Product } from "../../types";
 import { useCart, useCoupons, useProducts } from "../../refactoring/hooks";
-import * as cartUtils from "../../refactoring/cart/cart";
+import * as cartUtils from "../../refactoring/cart/models/cart";
 
 const mockProducts: Product[] = [
   {

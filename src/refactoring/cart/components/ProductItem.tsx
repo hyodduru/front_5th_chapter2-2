@@ -1,5 +1,5 @@
-import { Product } from "../../types";
-import { getMaxDiscount } from "./product";
+import { Product } from "../../../types";
+import { getMaxDiscount } from "../models/product";
 
 type ProductItemProps = {
   product: Product;

@@ -1,4 +1,4 @@
-import { CartItem, Coupon, Product } from "../../types";
+import { CartItem, Coupon, Product } from "../../../types";
 
 // 1. 최대 할인율 구하기
 export const getMaxApplicableDiscount = (item: CartItem) => {
