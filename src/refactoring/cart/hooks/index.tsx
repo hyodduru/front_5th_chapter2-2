@@ -1,5 +1,4 @@
-import { useCart } from "./useCart";
-import { useCoupons } from "./useCoupon";
-import { useProducts } from "./useProduct";
-
-export { useCart, useCoupons, useProducts };
+export * from "./useCart.ts";
+export * from "./useCoupon.ts";
+export * from "./useProduct.ts";
+export * from "./useLocalStorage.ts";

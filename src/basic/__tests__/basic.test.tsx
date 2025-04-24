@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 import {
   act,
   fireEvent,
@@ -440,6 +440,10 @@ describe("basic > ", () => {
   });
 
   describe("useCart > ", () => {
+    beforeEach(() => {
+      localStorage.clear(); // <-- 모든 테스트 전에 localStorage 초기화
+    });
+
     const testProduct: Product = {
       id: "1",
       name: "Test Product",
