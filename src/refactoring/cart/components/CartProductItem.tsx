@@ -1,15 +1,19 @@
 import { CartItem } from "../../../types";
-import { useCart } from "../hooks/useCart";
 import { getAppliedDiscount } from "../models/cart.ts";
 
 type CartProductItemProps = {
   item: CartItem;
+  removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, newQuantity: number) => void;
 };
 
-const CartProductItem = ({ item }: CartProductItemProps) => {
-  const { id, name, price } = item.product;
+const CartProductItem = ({
+  item,
+  removeFromCart,
+  updateQuantity
+}: CartProductItemProps) => {
+  const { price } = item.product;
 
-  const { removeFromCart, updateQuantity } = useCart(); // 훅 쪼개기!
   const appliedDiscount = getAppliedDiscount(item);
 
   return (

@@ -20,6 +20,7 @@ const ProductList = ({
           const remainingStock = getRemainingStock(product);
           return (
             <ProductItem
+              key={product.id}
               product={product}
               remainingStock={remainingStock}
               addToCart={addToCart}

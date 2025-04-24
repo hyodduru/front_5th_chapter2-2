@@ -1,34 +1,22 @@
 import { useState } from "react";
-import { Coupon, Discount, Product } from "../../../types.ts";
-import AdminProductPanel from "../components/AdminProductPanel.tsx";
-import AdminCouponPanel from "../components/AdminCouponPanel.tsx";
+import { Discount, Product } from "../../../types";
 
-interface AdminPageProps {
+type UseAdminProductProps = {
   products: Product[];
-  coupons: Coupon[];
   onProductUpdate: (updatedProduct: Product) => void;
   onProductAdd: (newProduct: Product) => void;
-  onCouponAdd: (newCoupon: Coupon) => void;
-}
+};
 
-export const AdminPage = ({
+export function useAdminProduct({
   products,
-  coupons,
   onProductUpdate,
-  onProductAdd,
-  onCouponAdd
-}: AdminPageProps) => {
+  onProductAdd
+}: UseAdminProductProps) {
   const [openProductIds, setOpenProductIds] = useState<Set<string>>(new Set());
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [newDiscount, setNewDiscount] = useState<Discount>({
     quantity: 0,
     rate: 0
-  });
-  const [newCoupon, setNewCoupon] = useState<Coupon>({
-    name: "",
-    code: "",
-    discountType: "percentage",
-    discountValue: 0
   });
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
@@ -41,41 +29,24 @@ export const AdminPage = ({
   const toggleProductAccordion = (productId: string) => {
     setOpenProductIds((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(productId)) {
-        newSet.delete(productId);
-      } else {
-        newSet.add(productId);
-      }
+      newSet.has(productId) ? newSet.delete(productId) : newSet.add(productId);
       return newSet;
     });
   };
 
-  // handleEditProduct 함수 수정
   const handleEditProduct = (product: Product) => {
     setEditingProduct({ ...product });
   };
 
-  // 새로운 핸들러 함수 추가
   const handleProductNameUpdate = (productId: string, newName: string) => {
-    if (editingProduct && editingProduct.id === productId) {
-      const updatedProduct = { ...editingProduct, name: newName };
-      setEditingProduct(updatedProduct);
+    if (editingProduct?.id === productId) {
+      setEditingProduct({ ...editingProduct, name: newName });
     }
   };
 
-  // 새로운 핸들러 함수 추가
   const handlePriceUpdate = (productId: string, newPrice: number) => {
-    if (editingProduct && editingProduct.id === productId) {
-      const updatedProduct = { ...editingProduct, price: newPrice };
-      setEditingProduct(updatedProduct);
-    }
-  };
-
-  // 수정 완료 핸들러 함수 추가
-  const handleEditComplete = () => {
-    if (editingProduct) {
-      onProductUpdate(editingProduct);
-      setEditingProduct(null);
+    if (editingProduct?.id === productId) {
+      setEditingProduct({ ...editingProduct, price: newPrice });
     }
   };
 
@@ -85,6 +56,13 @@ export const AdminPage = ({
       const newProduct = { ...updatedProduct, stock: newStock };
       onProductUpdate(newProduct);
       setEditingProduct(newProduct);
+    }
+  };
+
+  const handleEditComplete = () => {
+    if (editingProduct) {
+      onProductUpdate(editingProduct);
+      setEditingProduct(null);
     }
   };
 
@@ -113,39 +91,55 @@ export const AdminPage = ({
     }
   };
 
-  const handleAddCoupon = () => {
-    onCouponAdd(newCoupon);
-    setNewCoupon({
-      name: "",
-      code: "",
-      discountType: "percentage",
-      discountValue: 0
-    });
-  };
-
   const handleAddNewProduct = () => {
     const productWithId = { ...newProduct, id: Date.now().toString() };
     onProductAdd(productWithId);
-    setNewProduct({
-      name: "",
-      price: 0,
-      stock: 0,
-      discounts: []
-    });
+    setNewProduct({ name: "", price: 0, stock: 0, discounts: [] });
     setShowNewProductForm(false);
   };
 
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">관리자 페이지</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <AdminProductPanel
-          products={products}
-          onProductUpdate={onProductUpdate}
-          onProductAdd={onProductAdd}
-        />
-        <AdminCouponPanel onCouponAdd={onCouponAdd} coupons={coupons} />
-      </div>
-    </div>
-  );
-};
+  const handleNewProductFieldChange = <
+    K extends keyof Omit<Product, "id" | "discounts">
+  >(
+    field: K,
+    value: Product[K]
+  ) => {
+    setNewProduct((prev) => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleNewDiscountFieldChange = <K extends keyof Discount>(
+    field: K,
+    value: number
+  ) => {
+    const parsedValue = field === "rate" ? value / 100 : value;
+
+    setNewDiscount((prev) => ({
+      ...prev,
+      [field]: parsedValue as Discount[K]
+    }));
+  };
+
+  return {
+    openProductIds,
+    toggleProductAccordion,
+    editingProduct,
+    handleEditProduct,
+    handleProductNameUpdate,
+    handlePriceUpdate,
+    handleStockUpdate,
+    handleEditComplete,
+    newDiscount,
+    setNewDiscount,
+    handleAddDiscount,
+    handleRemoveDiscount,
+    showNewProductForm,
+    setShowNewProductForm,
+    newProduct,
+    handleAddNewProduct,
+    handleNewProductFieldChange,
+    handleNewDiscountFieldChange
+  };
+}

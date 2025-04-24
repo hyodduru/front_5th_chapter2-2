@@ -11,7 +11,7 @@ import {
 import { CartPage } from "../../refactoring/cart/pages/CartPage";
 import { AdminPage } from "../../refactoring/admin/pages/AdminPage";
 import { CartItem, Coupon, Product } from "../../types";
-import { useCart, useCoupons, useProducts } from "../../refactoring/hooks";
+import { useCart, useCoupons, useProducts } from "../../refactoring/cart/hooks";
 import * as cartUtils from "../../refactoring/cart/models/cart";
 
 const mockProducts: Product[] = [

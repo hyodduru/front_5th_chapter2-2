@@ -5,13 +5,22 @@ import ProductList from "../components/ProductList.tsx";
 import CartCoupon from "../components/CartCoupon.tsx";
 import CartSummary from "../components/CartSummary.tsx";
 
-interface Props {
+interface CartPageProps {
   products: Product[];
   coupons: Coupon[];
 }
 
-export const CartPage = ({ products, coupons }: Props) => {
-  const { cart, addToCart, getRemainingStock } = useCart();
+export const CartPage = ({ products, coupons }: CartPageProps) => {
+  const {
+    cart,
+    addToCart,
+    getRemainingStock,
+    calculateTotal,
+    applyCoupon,
+    selectedCoupon,
+    removeFromCart,
+    updateQuantity
+  } = useCart();
 
   return (
     <div className="container mx-auto p-4">
@@ -23,9 +32,17 @@ export const CartPage = ({ products, coupons }: Props) => {
           getRemainingStock={getRemainingStock}
         />
         <div>
-          <CartProductList cart={cart} />
-          <CartCoupon coupons={coupons} />
-          <CartSummary />
+          <CartProductList
+            cart={cart}
+            removeFromCart={removeFromCart}
+            updateQuantity={updateQuantity}
+          />
+          <CartCoupon
+            coupons={coupons}
+            applyCoupon={applyCoupon}
+            selectedCoupon={selectedCoupon}
+          />
+          <CartSummary calculateTotal={calculateTotal} />
         </div>
       </div>
     </div>

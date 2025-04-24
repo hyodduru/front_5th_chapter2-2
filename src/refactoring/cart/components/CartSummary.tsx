@@ -1,8 +1,12 @@
-import { useCart } from "../hooks/useCart.ts";
+interface CartSummaryProps {
+  calculateTotal: () => {
+    totalBeforeDiscount: number;
+    totalDiscount: number;
+    totalAfterDiscount: number;
+  };
+}
 
-const CartSummary = () => {
-  const { calculateTotal } = useCart();
-
+const CartSummary = ({ calculateTotal }: CartSummaryProps) => {
   const { totalBeforeDiscount, totalAfterDiscount, totalDiscount } =
     calculateTotal();
 

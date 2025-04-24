@@ -1,13 +1,16 @@
 import { Coupon } from "../../../types";
-import { useCart } from "../hooks/useCart";
 
 type CartCouponProps = {
   coupons: Coupon[];
+  applyCoupon: (coupon: Coupon) => void;
+  selectedCoupon: Coupon | null;
 };
 
-const CartCoupon = ({ coupons }: CartCouponProps) => {
-  const { applyCoupon, selectedCoupon } = useCart();
-
+const CartCoupon = ({
+  coupons,
+  applyCoupon,
+  selectedCoupon
+}: CartCouponProps) => {
   return (
     <div className="mt-6 bg-white p-4 rounded shadow">
       <h2 className="text-2xl font-semibold mb-2">쿠폰 적용</h2>
