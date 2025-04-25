@@ -1,11 +1,11 @@
 import { CartItem } from "../../../types";
 import { getAppliedDiscount } from "../models/cart.ts";
 
-type CartProductItemProps = {
+interface CartProductItemProps {
   item: CartItem;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, newQuantity: number) => void;
-};
+}
 
 const CartProductItem = ({
   item,

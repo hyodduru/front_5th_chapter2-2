@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Discount, Product } from "../../../types";
 import { useMemo } from "react";
 
-type UseAdminProductProps = {
+interface UseAdminProductProps {
   products: Product[];
   onProductUpdate: (updatedProduct: Product) => void;
   onProductAdd: (newProduct: Product) => void;
-};
+}
 
 export function useAdminProduct({
   products,

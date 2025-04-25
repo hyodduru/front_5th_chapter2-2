@@ -43,11 +43,7 @@ const AdminProductItem = ({
   } = adminProductHandlers;
 
   return (
-    <div
-      key={product.id}
-      className="bg-white p-4 rounded shadow"
-      data-testid={testId}
-    >
+    <div className="bg-white p-4 rounded shadow" data-testid={testId}>
       <button
         data-testid="toggle-button"
         onClick={() => toggleProductAccordion(product.id)}

@@ -1,11 +1,11 @@
 import { Product } from "../../../types";
 import ProductItem from "./ProductItem";
 
-type CartProductListProps = {
+interface CartProductListProps {
   products: Product[];
   addToCart: (product: Product) => void;
   getRemainingStock: (product: Product) => number;
-};
+}
 
 const ProductList = ({
   products,

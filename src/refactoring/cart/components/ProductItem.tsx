@@ -1,11 +1,11 @@
 import { Product } from "../../../types";
 import { getMaxDiscount } from "../models/product";
 
-type ProductItemProps = {
+interface ProductItemProps {
   product: Product;
   remainingStock: number;
   addToCart: (product: Product) => void;
-};
+}
 
 const ProductItem = ({
   product,

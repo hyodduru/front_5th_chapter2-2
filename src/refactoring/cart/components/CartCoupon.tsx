@@ -1,10 +1,10 @@
 import { Coupon } from "../../../types";
 
-type CartCouponProps = {
+interface CartCouponProps {
   coupons: Coupon[];
   applyCoupon: (coupon: Coupon) => void;
   selectedCoupon: Coupon | null;
-};
+}
 
 const CartCoupon = ({
   coupons,
