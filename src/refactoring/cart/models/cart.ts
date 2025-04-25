@@ -1,15 +1,7 @@
 import { CartItem, Coupon, Product } from "../../../types";
+import { getMaxApplicableDiscount } from "./discount";
 
-// 1. 최대 할인율 구하기
-export const getMaxApplicableDiscount = (item: CartItem) => {
-  const { quantity, product } = item;
-  const applicable = product.discounts
-    .filter((d) => quantity >= d.quantity)
-    .map((d) => d.rate);
-  return applicable.length > 0 ? Math.max(...applicable) : 0;
-};
-
-// 2. 상품 1개에 대한 최종 금액 계산
+//  상품 1개에 대한 최종 금액 계산
 export const calculateItemTotal = (item: CartItem) => {
   const discountRate = getMaxApplicableDiscount(item);
   const discountedPrice = item.product.price * (1 - discountRate);
@@ -74,16 +66,4 @@ export const updateCartItemQuantity = (
 export const getRemainingStock = (product: Product, cart: CartItem[]) => {
   const cartItem = cart.find((item) => item.product.id === product.id);
   return product.stock - (cartItem?.quantity || 0);
-};
-
-export const getAppliedDiscount = (item: CartItem) => {
-  const { discounts } = item.product;
-  const { quantity } = item;
-  let appliedDiscount = 0;
-  for (const discount of discounts) {
-    if (quantity >= discount.quantity) {
-      appliedDiscount = Math.max(appliedDiscount, discount.rate);
-    }
-  }
-  return appliedDiscount;
 };

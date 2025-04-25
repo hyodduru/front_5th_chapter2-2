@@ -13,6 +13,7 @@ import { AdminPage } from "../../refactoring/admin/pages/AdminPage";
 import { CartItem, Coupon, Product } from "../../types";
 import { useCart, useCoupons, useProducts } from "../../refactoring/cart/hooks";
 import * as cartUtils from "../../refactoring/cart/models/cart";
+import * as discountUtils from "../../refactoring/cart/models/discount";
 
 const mockProducts: Product[] = [
   {
@@ -367,12 +368,12 @@ describe("basic > ", () => {
     describe("getMaxApplicableDiscount", () => {
       test("할인이 적용되지 않으면 0을 반환해야 합니다.", () => {
         const item: CartItem = { product: testProduct, quantity: 1 };
-        expect(cartUtils.getMaxApplicableDiscount(item)).toBe(0);
+        expect(discountUtils.getMaxApplicableDiscount(item)).toBe(0);
       });
 
       test("적용 가능한 가장 높은 할인율을 반환해야 합니다.", () => {
         const item: CartItem = { product: testProduct, quantity: 5 };
-        expect(cartUtils.getMaxApplicableDiscount(item)).toBe(0.2);
+        expect(discountUtils.getMaxApplicableDiscount(item)).toBe(0.2);
       });
     });
 

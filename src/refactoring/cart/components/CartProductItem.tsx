@@ -1,5 +1,5 @@
 import { CartItem } from "../../../types";
-import { getAppliedDiscount } from "../models/cart.ts";
+import { getAppliedDiscount } from "../models/discount.ts";
 
 interface CartProductItemProps {
   item: CartItem;
