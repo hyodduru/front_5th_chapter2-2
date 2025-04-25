@@ -16,22 +16,14 @@ const AdminProductPanel = ({
 }: AdminProductPanelProps) => {
   const {
     openProductIds,
-    toggleProductAccordion,
     editingProduct,
-    handleEditProduct,
-    handleProductNameUpdate,
-    handlePriceUpdate,
-    handleStockUpdate,
-    handleEditComplete,
     newDiscount,
-    handleAddDiscount,
-    handleRemoveDiscount,
     showNewProductForm,
     setShowNewProductForm,
     newProduct,
     handleAddNewProduct,
     handleNewProductFieldChange,
-    handleNewDiscountFieldChange
+    adminProductHandlers
   } = useAdminProduct({ products, onProductUpdate, onProductAdd });
 
   return (
@@ -55,18 +47,9 @@ const AdminProductPanel = ({
           <AdminProductItem
             key={product.id}
             product={product}
-            toggleProductAccordion={toggleProductAccordion}
             openProductIds={openProductIds}
             editingProduct={editingProduct}
-            handleNewProductFieldChange={handleNewProductFieldChange}
-            handleProductNameUpdate={handleProductNameUpdate}
-            handlePriceUpdate={handlePriceUpdate}
-            handleStockUpdate={handleStockUpdate}
-            handleRemoveDiscount={handleRemoveDiscount}
-            handleAddDiscount={handleAddDiscount}
-            handleEditComplete={handleEditComplete}
-            handleEditProduct={handleEditProduct}
-            handleNewDiscountFieldChange={handleNewDiscountFieldChange}
+            adminProductHandlers={adminProductHandlers}
             newDiscount={newDiscount}
             data-testid={`product-${index + 1}`}
           />

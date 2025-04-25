@@ -2,46 +2,46 @@ import { Discount, Product } from "../../../types";
 
 interface AdminProductItemProps {
   product: Product;
-  toggleProductAccordion: (productId: string) => void;
   openProductIds: Set<string>;
   editingProduct: Product | null;
-  handleNewProductFieldChange: <
-    K extends keyof Omit<Product, "id" | "discounts">
-  >(
-    field: K,
-    value: Product[K]
-  ) => void;
-  handleProductNameUpdate: (productId: string, newName: string) => void;
-  handlePriceUpdate: (productId: string, newPrice: number) => void;
-  handleRemoveDiscount: (productId: string, index: number) => void;
-  handleAddDiscount: (productId: string) => void;
-  handleEditComplete: () => void;
-  handleStockUpdate: (productId: string, newStock: number) => void;
-  handleEditProduct: (product: Product) => void;
-  handleNewDiscountFieldChange: <K extends keyof Discount>(
-    field: K,
-    value: number
-  ) => void;
   newDiscount: Discount;
   "data-testid": string;
+  adminProductHandlers: {
+    toggleProductAccordion: (productId: string) => void;
+    editProduct: (product: Product) => void;
+    completeEdit: () => void;
+    updateProductName: (productId: string, name: string) => void;
+    updateProductPrice: (productId: string, price: number) => void;
+    updateProductStock: (productId: string, stock: number) => void;
+    addDiscount: (productId: string) => void;
+    removeDiscount: (productId: string, index: number) => void;
+    updateNewDiscountField: <K extends keyof Discount>(
+      field: K,
+      value: number
+    ) => void;
+  };
 }
 
 const AdminProductItem = ({
   product,
-  toggleProductAccordion,
   openProductIds,
   editingProduct,
-  handleProductNameUpdate,
-  handlePriceUpdate,
-  handleRemoveDiscount,
-  handleAddDiscount,
-  handleEditComplete,
-  handleStockUpdate,
-  handleEditProduct,
-  handleNewDiscountFieldChange,
+  adminProductHandlers,
   newDiscount,
   "data-testid": testId
 }: AdminProductItemProps) => {
+  const {
+    toggleProductAccordion,
+    editProduct,
+    completeEdit,
+    updateProductName,
+    updateProductPrice,
+    updateProductStock,
+    addDiscount,
+    removeDiscount,
+    updateNewDiscountField
+  } = adminProductHandlers;
+
   return (
     <div
       key={product.id}
@@ -65,7 +65,7 @@ const AdminProductItem = ({
                   type="text"
                   value={editingProduct.name}
                   onChange={(e) =>
-                    handleProductNameUpdate(product.id, e.target.value)
+                    updateProductName(product.id, e.target.value)
                   }
                   className="w-full p-2 border rounded"
                 />
@@ -76,7 +76,7 @@ const AdminProductItem = ({
                   type="number"
                   value={editingProduct.price}
                   onChange={(e) =>
-                    handlePriceUpdate(product.id, parseInt(e.target.value))
+                    updateProductPrice(product.id, parseInt(e.target.value))
                   }
                   className="w-full p-2 border rounded"
                 />
@@ -87,7 +87,7 @@ const AdminProductItem = ({
                   type="number"
                   value={editingProduct.stock}
                   onChange={(e) =>
-                    handleStockUpdate(product.id, parseInt(e.target.value))
+                    updateProductStock(product.id, parseInt(e.target.value))
                   }
                   className="w-full p-2 border rounded"
                 />
@@ -105,7 +105,7 @@ const AdminProductItem = ({
                       할인
                     </span>
                     <button
-                      onClick={() => handleRemoveDiscount(product.id, index)}
+                      onClick={() => removeDiscount(product.id, index)}
                       className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                     >
                       삭제
@@ -118,7 +118,7 @@ const AdminProductItem = ({
                     placeholder="수량"
                     value={newDiscount.quantity}
                     onChange={(e) =>
-                      handleNewDiscountFieldChange(
+                      updateNewDiscountField(
                         "quantity",
                         parseInt(e.target.value) || 0
                       )
@@ -132,7 +132,7 @@ const AdminProductItem = ({
                       isNaN(newDiscount.rate * 100) ? 0 : newDiscount.rate * 100
                     }
                     onChange={(e) =>
-                      handleNewDiscountFieldChange(
+                      updateNewDiscountField(
                         "rate",
                         parseInt(e.target.value) || 0
                       )
@@ -140,7 +140,7 @@ const AdminProductItem = ({
                     className="w-1/3 p-2 border rounded"
                   />
                   <button
-                    onClick={() => handleAddDiscount(product.id)}
+                    onClick={() => addDiscount(product.id)}
                     className="w-1/3 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
                   >
                     할인 추가
@@ -148,7 +148,7 @@ const AdminProductItem = ({
                 </div>
               </div>
               <button
-                onClick={handleEditComplete}
+                onClick={completeEdit}
                 className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 mt-2"
               >
                 수정 완료
@@ -166,7 +166,7 @@ const AdminProductItem = ({
               ))}
               <button
                 data-testid="modify-button"
-                onClick={() => handleEditProduct(product)}
+                onClick={() => editProduct(product)}
                 className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 mt-2"
               >
                 수정

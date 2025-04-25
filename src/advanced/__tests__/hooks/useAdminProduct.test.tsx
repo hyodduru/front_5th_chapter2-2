@@ -49,7 +49,7 @@ describe("useAdminProduct 훅", () => {
     );
 
     act(() => {
-      result.current.handleEditProduct(product);
+      result.current.adminProductHandlers.editProduct(product);
     });
 
     expect(result.current.editingProduct?.id).toBe(product.id);
@@ -67,11 +67,14 @@ describe("useAdminProduct 훅", () => {
     );
 
     act(() => {
-      result.current.handleEditProduct(product);
+      result.current.adminProductHandlers.editProduct(product);
     });
 
     act(() => {
-      result.current.handleProductNameUpdate(product.id, "새 이름");
+      result.current.adminProductHandlers.updateProductName(
+        product.id,
+        "새 이름"
+      );
     });
 
     expect(result.current.editingProduct?.name).toBe("새 이름");
@@ -88,42 +91,14 @@ describe("useAdminProduct 훅", () => {
       })
     );
 
-    // 1단계: 상품 수정 모드로 전환
     act(() => {
-      result.current.handleEditProduct(product);
+      result.current.adminProductHandlers.editProduct(product);
     });
 
-    // 2단계: 가격 수정
     act(() => {
-      result.current.handlePriceUpdate(product.id, 20000);
+      result.current.adminProductHandlers.updateProductPrice(product.id, 20000);
     });
 
-    // 가격 수정 후, 수정된 가격 확인
-    expect(result.current.editingProduct?.price).toBe(20000);
-  });
-
-  it("상품 가격을 수정할 수 있어야 한다", () => {
-    const product = sampleProduct();
-
-    const { result } = renderHook(() =>
-      useAdminProduct({
-        products: [product],
-        onProductUpdate: mockOnProductUpdate,
-        onProductAdd: mockOnProductAdd
-      })
-    );
-
-    // 먼저 수정할 상품 설정
-    act(() => {
-      result.current.handleEditProduct(product);
-    });
-
-    // 그 후 가격 업데이트
-    act(() => {
-      result.current.handlePriceUpdate(product.id, 20000);
-    });
-
-    // 상태가 반영되었는지 검증
     expect(result.current.editingProduct?.price).toBe(20000);
   });
 
@@ -138,14 +113,12 @@ describe("useAdminProduct 훅", () => {
       })
     );
 
-    // 먼저 상품 수정 모드로 설정
     act(() => {
-      result.current.handleEditProduct(product);
+      result.current.adminProductHandlers.editProduct(product);
     });
 
-    // 그다음 할인 추가
     act(() => {
-      result.current.handleAddDiscount(product.id);
+      result.current.adminProductHandlers.addDiscount(product.id);
     });
 
     expect(mockOnProductUpdate).toHaveBeenCalled();
@@ -166,12 +139,33 @@ describe("useAdminProduct 훅", () => {
     );
 
     act(() => {
-      result.current.handleEditProduct(productWithDiscount);
-      result.current.handleRemoveDiscount(productWithDiscount.id, 0);
+      result.current.adminProductHandlers.editProduct(productWithDiscount);
+      result.current.adminProductHandlers.removeDiscount(
+        productWithDiscount.id,
+        0
+      );
     });
 
     expect(mockOnProductUpdate).toHaveBeenCalled();
     expect(result.current.editingProduct?.discounts).toHaveLength(0);
+  });
+
+  it("할인 입력 필드를 수정할 수 있어야 한다", () => {
+    const { result } = renderHook(() =>
+      useAdminProduct({
+        products: [],
+        onProductUpdate: mockOnProductUpdate,
+        onProductAdd: mockOnProductAdd
+      })
+    );
+
+    act(() => {
+      result.current.adminProductHandlers.updateNewDiscountField("quantity", 5);
+      result.current.adminProductHandlers.updateNewDiscountField("rate", 5); // 5% 입력
+    });
+
+    expect(result.current.newDiscount.quantity).toBe(5);
+    expect(result.current.newDiscount.rate).toBe(0.05); // 내부적으로 0.05로 저장
   });
 
   it("상품 추가 폼의 필드를 수정할 수 있어야 한다", () => {
@@ -192,23 +186,5 @@ describe("useAdminProduct 훅", () => {
     expect(result.current.newProduct.name).toBe("추가 상품");
     expect(result.current.newProduct.price).toBe(5000);
     expect(result.current.newProduct.stock).toBe(20);
-  });
-
-  it("할인 입력 필드를 수정할 수 있어야 한다", () => {
-    const { result } = renderHook(() =>
-      useAdminProduct({
-        products: [],
-        onProductUpdate: mockOnProductUpdate,
-        onProductAdd: mockOnProductAdd
-      })
-    );
-
-    act(() => {
-      result.current.handleNewDiscountFieldChange("quantity", 5);
-      result.current.handleNewDiscountFieldChange("rate", 5); // % 입력 기준
-    });
-
-    expect(result.current.newDiscount.quantity).toBe(5);
-    expect(result.current.newDiscount.rate).toBe(0.05); // 내부적으로 5%는 0.05로 저장
   });
 });

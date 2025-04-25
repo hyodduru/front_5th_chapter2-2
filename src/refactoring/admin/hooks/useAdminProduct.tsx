@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Discount, Product } from "../../../types";
+import { useMemo } from "react";
 
 type UseAdminProductProps = {
   products: Product[];
@@ -122,23 +123,30 @@ export function useAdminProduct({
     }));
   };
 
+  const adminProductHandlers = useMemo(
+    () => ({
+      toggleProductAccordion,
+      editProduct: handleEditProduct,
+      completeEdit: handleEditComplete,
+      updateProductName: handleProductNameUpdate,
+      updateProductPrice: handlePriceUpdate,
+      updateProductStock: handleStockUpdate,
+      addDiscount: handleAddDiscount,
+      removeDiscount: handleRemoveDiscount,
+      updateNewDiscountField: handleNewDiscountFieldChange
+    }),
+    [editingProduct, newDiscount, openProductIds, products]
+  );
+
   return {
     openProductIds,
-    toggleProductAccordion,
     editingProduct,
-    handleEditProduct,
-    handleProductNameUpdate,
-    handlePriceUpdate,
-    handleStockUpdate,
-    handleEditComplete,
     newDiscount,
-    handleAddDiscount,
-    handleRemoveDiscount,
     showNewProductForm,
     setShowNewProductForm,
     newProduct,
     handleAddNewProduct,
     handleNewProductFieldChange,
-    handleNewDiscountFieldChange
+    adminProductHandlers
   };
 }
